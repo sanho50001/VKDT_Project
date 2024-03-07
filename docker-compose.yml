@@ -1,0 +1,57 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    logging:
+      driver: 'json-file'
+      options:
+        max-file: '10'
+        max-size: '200k'
+
+  celery:
+    container_name: celery
+    restart: always
+    build:
+      context: .
+#    volumes:
+#      - pg_project:/var/lib/postgresql/data
+    command: [ "celery", "-A", "BlizNews", "worker", "-l", "info", '-P', 'eventlet']
+    depends_on:
+      - redis
+      - app
+    logging:
+      driver: 'json-file'
+      options:
+        max-file: '10'
+        max-size: '200k'
+
+
+  app:
+    container_name: VKDT
+    restart: always
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    volumes:
+      - media_volume:/home/app/web/media
+    ports:
+      - "8000:8000"
+#    command: bash -c "python manage.py makemigrations &&
+#      python manage.py migrate &&
+#      gunicorn BlizNews.wsgi:application --bind 0.0.0.0:8000 &&
+#      python manage.py createsuperuser admin admin"
+    command: bash -c "python VKDT\VK\VK_main.py"
+    logging:
+      driver: 'json-file'
+      options:
+        max-file: '10'
+        max-size: '200k'
+
+
+volumes:
+
+  media_volume:
