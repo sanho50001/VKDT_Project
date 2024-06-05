@@ -1,23 +1,26 @@
 import time
 # from celery import shared_task
-from VKDT.VKDT.celery import app
-from VKDT.VK.VK_main import *
+from config.celery import app
+from VK.services import *
 
 
 @app.task
-def news_task(task_id=1):
+def post_task(task_id=1):
 
     while True:
-        print('Начат процесс таска ')
+        print('Начат процесс таска | Post')
+        print('Начат процесс таска | Find file')
+        queue.out_queue()
+        print('Завершение | Find file')
         print()
-        print('Отправка в VK')
+        print('Отправка в VK | Post')
         file = vkontacte.saved_in_vk()
-        print('Пост выложен')
+        print('Пост выложен | Post')
         print()
-
 
         vkontacte.replaced(file=file)
-        print('Отправка в сон')
+        print('Отправка в сон | Post')
         minutes = 30
         secundes = 60
         time.sleep(minutes * secundes)
+        print('Возвращение из сна. | Post')

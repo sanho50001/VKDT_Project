@@ -1,0 +1,100 @@
+version: "3.9"
+
+services:
+  redis:
+    container_name: redis
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    logging:
+      driver: 'json-file'
+      options:
+        max-file: '10'
+        max-size: '2k'
+
+  celery:
+    container_name: celery
+    restart: always
+    build:
+      context: .
+#    volumes:
+#      - pg_project:/var/lib/postgresql/data
+    command: [ "celery", "-A", "config", "worker", "-l", "info", '-P', 'eventlet']
+    depends_on:
+      - redis
+      - app
+    logging:
+      driver: 'json-file'
+      options:
+        max-file: '10'
+        max-size: '2k'
+
+
+  app:
+    container_name: VKDT
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: .
+    volumes:
+      - media_volume:/home/app/web/media
+    ports:
+      - "8000:8000"
+    command: bash -c "python manage.py makemigrations &&
+      python manage.py migrate &&
+      gunicorn config.wsgi:application --bind 0.0.0.0:8000 &&
+      python manage.py createsuperuser admin admin"
+#    command: bash -c "python VKDT\VK\VK_main.py"
+    logging:
+      driver: 'json-file'
+      options:
+        max-file: '10'
+        max-size: '2k'
+
+  MySQLDB:
+    image: mysql:latest
+    container_name: MySQLDB
+    restart: always
+    build:
+#      dockerfile: docker_files/dockerfiles/Dockerfile_db
+      context: .
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_DATABASE=vkdtdatabase
+      - MYSQL_ROOT_PASSWORD=1
+      - MYSQL_PASSWORD=1
+    volumes:
+      - db_project:/var/lib/mysql/data
+    ports:
+      - "3306:3306"
+    logging:
+      driver: 'json-file'
+      options:
+        max-file: '10'
+#        max-size: '2k'
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 4G
+
+  nginx:
+    image: nginx
+    container_name: nginx
+    build:
+      dockerfile: docker_files/dockerfiles/Dockerfile_nginx
+    volumes:
+      - static_volume:/home/app/web/static
+      - media_volume:/home/app/web/media
+    ports:
+      - 1337:80
+    depends_on:
+      - app
+    links:
+      - app
+
+volumes:
+  media_volume:
+  static_volume:
+  db_project:

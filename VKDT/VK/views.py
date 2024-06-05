@@ -1,3 +1,32 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from VK.tasks.post_tasks import post_task
+from VK.models import VK
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+# from VK_main import saved
+from VK.services import saved
 
-# Create your views here.
+
+class MainView(ListView):
+    """Функция отображения Скидок"""
+    model = VK
+
+    template_name = "VK/index.jinja2"
+    paginate_by = 6
+    context_object_name = "vk"
+
+
+def post(request):
+    post_task.delay()
+    # parser_main_page()
+
+    return redirect("VK:main")
+
+
+def create_model(request):
+    vk_model_post = VK(text='',
+                       post_id=saved.get_photo_id(),
+                       file_post=saved.get_photo_name(),
+                       post_image_url=f'')
+    vk_model_post.save()
+
+    return redirect("VK:main")

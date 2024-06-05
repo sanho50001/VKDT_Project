@@ -1,0 +1,131 @@
+
+{% block head %}
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>VK Post</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {#        <link rel="manifest" href="site.webmanifest">#}
+        <link rel="shortcut icon" type="image/x-icon" href="{{ static('VK/img/logo/vk.jpg') }}">
+
+        <!-- CSS here -->
+        <link rel="stylesheet" href="{{ static('VK/css/index_css.css') }}">
+        <!-- CSS here -->
+    </head>
+{% endblock %}
+
+{% block body %}
+
+
+    <main style="">
+        <!-- Start -->
+
+        <div class="main">
+            <!-- Start main post -->
+            {% for item in vk %}
+
+            <div class="main_post">
+                <!-- Start post -->
+
+                <div class="post_id">
+                    {% if item.post_id and item.post_image_url %}
+                        <a class="page-link" href="{{ item.post_image_url }}">
+                            {{ item.post_id }}
+                        </a>
+                    {% else %}
+                        {{ item.post_id }}
+                    {% endif %}
+                </div>
+
+                <div class="post_photo">
+                    {% if item.filepost %}
+
+                        <img src="{{ item.file_post }}" alt="{{ item.post_id }}">
+                    {% else %}
+                        <img src="{{ static('VK/img/logo/no_photo.jpg') }}" alt="{{ item.post_id }}">
+                    {% endif %}
+                </div>
+
+                <div class="post_data_created">
+                    {% if item.created %}
+
+                        {{ item.created }}
+                    {% else %}
+                        Not Dated
+                    {% endif %}
+
+                </div>
+
+                <!-- End post -->
+            </div>
+
+            <!-- End main post -->
+
+        </div>
+
+        <!-- End -->
+
+        <!--Start pagination -->
+{#        <div class="pagination-area pb-45 text-center">#}
+{##}
+{#            <div class="container">#}
+{##}
+{#                <div class="row">#}
+{##}
+{#                    <div class="col-xl-12">#}
+{##}
+{#                        <div class="single-wrap d-flex justify-content-center">#}
+{##}
+{#                            <nav aria-label="Page navigation example">#}
+{##}
+{#                                <ul class="pagination justify-content-start">#}
+{#                                    {% if is_paginated %}#}
+{##}
+{#                                    {% if page_obj.has_previous() %}#}
+{#                                        <li class="page-item">#}
+{#                                            <a class="page-link" href="?page={{ page_obj.previous_page_number() }}">#}
+{#                                                <span class="flaticon-arrow roted"></span>#}
+{#                                            </a>#}
+{#                                        </li>#}
+{#                                    {% endif %}#}
+{##}
+{#                                    {% for pagin in paginator.page_range %}#}
+{#                                        {% if page_obj.number == pagin %}#}
+{#                                            <li class="page-item active">#}
+{#                                                <a class="page-link" href="?page={{ pagin }}">{{ pagin }}</a>#}
+{#                                            </li>#}
+{#                                        {% else %}#}
+{#                                            <li class="page-item">#}
+{#                                                <a class="page-link" href="?page={{ pagin }}">{{ pagin }}</a>#}
+{#                                            </li>#}
+{#                                        {% endif %}#}
+{#                                    {% endfor %}#}
+{#                                    {% endif %}#}
+{#                                    {% if page_obj.has_next() %}#}
+{#                                        <li class="page-item">#}
+{#                                        <a class="page-link" href="?page={{ page_obj.next_page_number() }}">#}
+{#                                            <span class="flaticon-arrow right-arrow">#}
+{##}
+{#                                            </span>#}
+{#                                        </a>#}
+{#                                    {% endif %}#}
+{##}
+{#                                    </li>#}
+{##}
+{#                                </ul>#}
+{#                            </nav>#}
+{##}
+{#                        </div>#}
+{##}
+{#                    </div>#}
+{##}
+{#                </div>#}
+{##}
+{#            </div>#}
+{#        </div>#}
+        <!-- End pagination  -->
+    </main>
+
+    </body>
+{% endblock %}

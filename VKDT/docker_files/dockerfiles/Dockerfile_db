@@ -1,0 +1,9 @@
+FROM mysql:latest
+
+ENV MYSQL_USER=root
+ENV MYSQL_PASSWORD=1
+
+#RUN mysqladmin var | grep socket > /etc/mysql/mysql.conf.d/mysqld.cnf
+
+EXPOSE 3306
+

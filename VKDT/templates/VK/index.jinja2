@@ -1,0 +1,184 @@
+{% include 'VK/footer.jinja2' %}
+
+{% block head %}
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>VK Post</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {#        <link rel="manifest" href="site.webmanifest">#}
+        <link rel="shortcut icon" type="image/x-icon" href="{{ static('VK/img/logo/vk.jpg') }}">
+
+        <!-- CSS here -->
+
+        <link rel="stylesheet" href="{{ static('VK/css/index_css.css') }}">
+        <link rel="stylesheet"
+              href="{{ static('VK/css/bootstrap-5.2.2-dist/bootstrap-5.2.2-dist/css/bootstrap.css') }} ">
+        <!-- CSS here -->
+    </head>
+{% endblock %}
+
+{% block body %}
+
+    <body class="main_body" style="
+            background-image: url({{ static('VK/img/vk.jpg') }});">
+    <main>
+        <!-- Start -->
+        <div class="container">
+
+            <div class="row">
+                <div class="col">
+
+                    <div class="main container float-lg-start" id="main-container">
+                        <!-- Start main post -->
+                        {% for item in vk %}
+                            <div class="main_post">
+                                <!-- Start post -->
+
+                                <div class="post_id">
+                                    {% if item.post_id and item.post_image_url %}
+                                        <a class="page-link" href="{{ item.post_image_url }}">
+                                            {{ item.post_id }}
+                                        </a>
+                                    {% else %}
+                                        {{ item.post_id }}
+                                    {% endif %}
+                                </div>
+
+                                <div class="post_photo">
+                                    {% if item.filepost %}
+
+                                        <img src="{{ item.file_post }}" alt="{{ item.post_id }}">
+                                    {% else %}
+                                        <img src="{{ static('VK/img/no_photo.jpg') }}" width="35px" height="35px" alt="{{ item.post_id }}">
+                                    {% endif %}
+                                </div>
+
+                                <div class="post_data_created">
+                                    {% if item.created %}
+
+                                        {{ item.created }}
+                                    {% else %}
+                                        Not Dated
+                                    {% endif %}
+
+                                </div>
+
+                                <!-- End post -->
+
+                            </div>
+                        {% endfor %}
+                        <!-- End main post -->
+
+                    </div>
+
+                    <div class="col">
+                        <div class="container">
+                            <div class="float-end" id="table-info">
+                                <div style="color: orange">
+                                    upload file:
+                                    {% if upload_file == 0 %}
+                                        <mark id="upload_file_null"> 0</mark>
+                                    {% else %}
+                                        <mark id="upload_file"> 0</mark>
+                                    {% endif %}
+
+                                </div>
+                                <div style="color: gold">
+                                    archive file:
+                                    {% if archive_file == 0 %}
+                                        <mark id="archive_file_null"> 0</mark>
+                                    {% else %}
+                                        <mark id="archive_file"> 0</mark>
+                                    {% endif %}
+
+                                </div>
+                                <div>
+                                    archive file:
+                                    {% if archive_file == 0 %}
+                                        <mark id="upload_file_null"> 0</mark>
+                                    {% else %}
+                                        <mark id="upload_file"> 0</mark>
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <!-- End -->
+
+    </main>
+
+    </body>
+        <!--Start pagination -->
+                <div class="pagination-area pb-45 text-center" id="paginator">
+
+                    <div class="container">
+
+                        <div class="row">
+
+                            <div class="col-xl-12">
+
+                                <div class="single-wrap d-flex justify-content-center">
+
+                                    <nav aria-label="Page navigation example">
+
+                                        <ul class="pagination justify-content-start">
+                                            {% if is_paginated %}
+
+                                            {% if page_obj.has_previous() %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page={{ page_obj.previous_page_number() }}">
+                                                        <span class="flaticon-arrow roted"><img
+                                            src="{{ static ('VK/img/icons/prevPagination.svg') }}"
+                                            alt="prevPagination.svg"/></span>
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+
+                                            {% for pagin in paginator.page_range %}
+                                                {% if page_obj.number == pagin %}
+                                                    <li class="page-item active">
+                                                        <a class="page-link" href="?page={{ pagin }}">{{ pagin }}</a>
+                                                    </li>
+                                                {% else %}
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?page={{ pagin }}">{{ pagin }}</a>
+                                                    </li>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% endif %}
+                                            {% if page_obj.has_next() %}
+                                                <li class="page-item">
+                                                <a class="page-link" href="?page={{ page_obj.next_page_number() }}">
+                                                    <span class="flaticon-arrow right-arrow">
+                                                    <img src="{{ static ('VK/img/icons/nextPagination.svg') }}" alt="nextPagination.svg"/>
+                                                    </span>
+                                                </a>
+                                            {% endif %}
+
+                                            </li>
+
+                                        </ul>
+                                    </nav>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+        <!-- End pagination  -->
+{% endblock %}
