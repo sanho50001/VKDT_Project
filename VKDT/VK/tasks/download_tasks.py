@@ -8,7 +8,7 @@ from VK.services import start_download_file
 def download_task(task_id=1):
 
     while True:
-        print('Старт загрузки файлв')
+        print('Старт загрузки файлов')
         start_download_file()
         print('')
         print('Загрузка файлов завершенна.')
