@@ -1,5 +1,5 @@
 import time
-# from celery import shared_task
+
 from config.celery import app
 from VK.services import start_download_file
 
