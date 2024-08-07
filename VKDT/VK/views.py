@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from VK.tasks.post_tasks import post_task
+from VK.tasks.post_tasks import upload_tasks
 from VK.models import VK
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-# from VK_main import saved
-from VK.services import saved
+from VK.services import vkapi
 
 
 class MainView(ListView):
@@ -15,8 +14,8 @@ class MainView(ListView):
     context_object_name = "vk"
 
 
-def post(request):
-    post_task.delay()
+def upload_task(request):
+    upload_tasks.delay()
     # parser_main_page()
 
     return redirect("VK:main")
@@ -24,8 +23,8 @@ def post(request):
 
 def create_model(request):
     vk_model_post = VK(text='',
-                       post_id=saved.get_photo_id(),
-                       file_post=saved.get_photo_name(),
+                       post_id=vkapi.get_photo_id(),
+                       file_post=vkapi.get_photo_name(),
                        post_image_url=f'')
     vk_model_post.save()
 
