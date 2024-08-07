@@ -11,4 +11,4 @@ def download_task(task_id=1):
         print('Старт загрузки файлов')
         start_download_file()
         print('')
-        print('Загрузка завершенна.')
+        print('Загрузка была завершенна.')
